@@ -1,0 +1,78 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" xmlns:dm1="http://schemas.microsoft.com/dsltools/Kernel" xmlns:dm2="http://schemas.microsoft.com/dsltools/Component" xmlns:dm3="http://schemas.microsoft.com/dsltools/UseCase" xmlns:dm4="http://schemas.microsoft.com/dsltools/Activity" xmlns:dm5="http://schemas.microsoft.com/dsltools/Interaction" xmlns:dm6="http://schemas.microsoft.com/dsltools/UmlModelLibrary" xmlns:dm7="http://schemas.microsoft.com/dsltools/UmlDiagrams" xmlns:dm8="http://schemas.microsoft.com/dsltools/LogicalClassDesigner"
+  dslVersion="1.0.0.0"
+  Id="4cc6d9dd-4225-4e0e-955b-f84a11f28aba"
+  name="ViewModel" xmlns="http://schemas.microsoft.com/dsltools/ModelStore">
+  <packagedElements>
+    <packageHasNamedElement>
+      <class
+        Id="cf14092f-aeba-442b-90ca-5aa6f86a947a"
+        name="MainVM"
+        isAbstract="false"
+        isLeaf="false"
+        isActiveClass="false">
+        <appliedStereotypesInternal>
+          <stereotypeInstance
+            Id="8a884235-26a0-4e13-8f4d-59f4f5320301"
+            name="class"
+            profile="CSharpProfile">
+            <propertyInstances>
+              <stereotypeInstanceHasPropertyInstances
+                Id="fd584a37-2665-4ab6-9207-5e081a267d1f">
+                <propertyInstance
+                  Id="7bcf576e-bfe0-4945-b5f9-83d5b949f3a8"
+                  name="ClrAttributes" />
+              </stereotypeInstanceHasPropertyInstances>
+              <stereotypeInstanceHasPropertyInstances
+                Id="e103baa2-1706-4a06-9a02-b8b4b5e6020b">
+                <propertyInstance
+                  Id="e5f5ab8b-3f32-4c8f-9634-2ec7235be760"
+                  name="IsPartial"
+                  value="false" />
+              </stereotypeInstanceHasPropertyInstances>
+              <stereotypeInstanceHasPropertyInstances
+                Id="499308da-25c0-49d4-b0b3-fa51ee593398">
+                <propertyInstance
+                  Id="3ca3e9ec-33a3-42e3-ae45-6141e37f5f43"
+                  name="IsStatic"
+                  value="false" />
+              </stereotypeInstanceHasPropertyInstances>
+              <stereotypeInstanceHasPropertyInstances
+                Id="f35229ff-1fbc-4158-ab97-7c65ee4b59c9">
+                <propertyInstance
+                  Id="021075fb-94e0-4519-b4bb-58c29fa92197"
+                  name="IsUnsafe"
+                  value="false" />
+              </stereotypeInstanceHasPropertyInstances>
+              <stereotypeInstanceHasPropertyInstances
+                Id="506c0957-38ec-463c-a40c-d1034165dede">
+                <propertyInstance
+                  Id="fd18392d-7ae5-4fea-b86c-f9913c37cdcb"
+                  name="PackageVisibility"
+                  value="internal" />
+              </stereotypeInstanceHasPropertyInstances>
+            </propertyInstances>
+          </stereotypeInstance>
+        </appliedStereotypesInternal>
+      </class>
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <packageMoniker
+        Id="f5e4f7b7-611a-400e-b102-1a6ef4158250"
+        LastKnownName="Result"
+        LastKnownLocation="Package_1934.uml" />
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <packageMoniker
+        Id="3de15671-913e-4a08-8541-bda0f925fc18"
+        LastKnownName="DescriptionOfTask"
+        LastKnownLocation="Package_1937.uml" />
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <packageMoniker
+        Id="04f2248a-d3e9-42bf-8276-f873d099db82"
+        LastKnownName="Processing"
+        LastKnownLocation="Package_1939.uml" />
+    </packageHasNamedElement>
+  </packagedElements>
+</package>

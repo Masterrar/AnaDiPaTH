@@ -1,0 +1,12 @@
+C:\Users\Артем\Documents\Visual Studio 2012\Projects\NIR\NIR\obj\Debug\App.g.cs
+C:\Users\Артем\Documents\Visual Studio 2012\Projects\NIR\NIR\obj\Debug\NIR_MarkupCompile.cache
+C:\Users\Артем\Documents\Visual Studio 2012\Projects\NIR\NIR\bin\Debug\NIR.exe
+C:\Users\Артем\Documents\Visual Studio 2012\Projects\NIR\NIR\bin\Debug\NIR.pdb
+C:\Users\Артем\Documents\Visual Studio 2012\Projects\NIR\NIR\obj\Debug\Views\MainView.baml
+C:\Users\Артем\Documents\Visual Studio 2012\Projects\NIR\NIR\obj\Debug\Views\MainView.g.cs
+C:\Users\Артем\Documents\Visual Studio 2012\Projects\NIR\NIR\obj\Debug\NIR.g.resources
+C:\Users\Артем\Documents\Visual Studio 2012\Projects\NIR\NIR\obj\Debug\NIR.Properties.Resources.resources
+C:\Users\Артем\Documents\Visual Studio 2012\Projects\NIR\NIR\obj\Debug\NIR.csproj.GenerateResource.Cache
+C:\Users\Артем\Documents\Visual Studio 2012\Projects\NIR\NIR\obj\Debug\NIR.exe
+C:\Users\Артем\Documents\Visual Studio 2012\Projects\NIR\NIR\obj\Debug\NIR.pdb
+C:\Users\Артем\Documents\Visual Studio 2012\Projects\NIR\NIR\obj\Debug\NIR.csprojResolveAssemblyReference.cache

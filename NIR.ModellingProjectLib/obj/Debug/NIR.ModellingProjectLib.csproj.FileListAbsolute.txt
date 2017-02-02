@@ -1,0 +1,5 @@
+C:\Users\Артем\Documents\Visual Studio 2012\Projects\NIR\NIR.ModellingProjectLib\bin\Debug\NIR.ModellingProjectLib.dll
+C:\Users\Артем\Documents\Visual Studio 2012\Projects\NIR\NIR.ModellingProjectLib\bin\Debug\NIR.ModellingProjectLib.pdb
+C:\Users\Артем\Documents\Visual Studio 2012\Projects\NIR\NIR.ModellingProjectLib\obj\Debug\NIR.ModellingProjectLib.csprojResolveAssemblyReference.cache
+C:\Users\Артем\Documents\Visual Studio 2012\Projects\NIR\NIR.ModellingProjectLib\obj\Debug\NIR.ModellingProjectLib.dll
+C:\Users\Артем\Documents\Visual Studio 2012\Projects\NIR\NIR.ModellingProjectLib\obj\Debug\NIR.ModellingProjectLib.pdb
