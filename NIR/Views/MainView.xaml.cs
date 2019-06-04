@@ -132,14 +132,14 @@ namespace NIR.Views
             var midY = Y.Sum() / c_pixels;
             
                
-            //ib.ImageSource = current_bimage;
-            ////DrawCanvas.Height = ib.ImageSource.Height;
-            ////DrawCanvas.Width = ib.ImageSource.Width;
-            //DrawCanvas.Background = ib;
-            this.Width = 1024;
-            this.Height = 768;
+            ib.ImageSource = current_bimage;
+            DrawCanvas.Height = ib.ImageSource.Height;
+            DrawCanvas.Width = ib.ImageSource.Width;
+            DrawCanvas.Background = ib;
+            this.Width = ib.ImageSource.Width;
+            this.Height = ib.ImageSource.Height;
             //canvas = DrawCanvas;
-            //window = this;
+            window = this;
 
         }
         private void polylineToolMouseDown(object sender, MouseButtonEventArgs e)

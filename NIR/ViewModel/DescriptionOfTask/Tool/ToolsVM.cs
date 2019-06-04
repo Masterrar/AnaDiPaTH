@@ -12,14 +12,14 @@ namespace ViewModel.DescriptionOfTask.Tool
 	using System.Text;
     using Shape;
     using System.Drawing;
-	public static class ToolsVM
+	public class ToolsVM
 	{
         
-        public static LineVM Line(Point MidPoint)
+        public LineVM Line(Point MidPoint)
         {
              return new LineVM(MidPoint); 
         }
-        public static EllipseVM Ellipse(Point MidPoint)
+        public EllipseVM Ellipse(Point MidPoint)
         {
             return new EllipseVM(MidPoint); 
         }
