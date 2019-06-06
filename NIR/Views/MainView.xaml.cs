@@ -1,32 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-
-using System.Windows.Markup;
-using NIR.ViewModels;
-using NIR.Views;
-using System.IO;
 using System.Drawing.Imaging;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Shapes;
-using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
+
 namespace NIR.Views
 {
+    using ViewModels;
     public enum DrawToolType : byte
     {
         None = 0,
@@ -38,9 +24,8 @@ namespace NIR.Views
 
     public struct MyPoint
     {
-        int X;
-        int Y;
-        
+        public int X { get; set; }
+        public int Y { get; set; }
     }
     /// <summary>
     /// Логика взаимодействия для MainView.xaml
@@ -48,7 +33,7 @@ namespace NIR.Views
     /// 
     public partial class MainView : Window
     {
-        public byte[] imageToByteArray(Bitmap bmp,out int stride )
+        public byte[] ImageToByteArray(Bitmap bmp,out int stride )
         {
             var pxf = System.Drawing.Imaging.PixelFormat.Format24bppRgb;
 
@@ -77,13 +62,10 @@ namespace NIR.Views
         //private Canvas canvas; // рабочая область для рисования
         private Shape lastShape = null; // текущая обрабатываемая фигура
         private Window window;
-        private Line lastShapeAsLine
-        {
-            get
-            {
-                return this.lastShape as Line;
-            }
-        }
+#pragma warning disable IDE1006 // Стили именования
+        private Line lastShapeAsLine => this.lastShape as Line;
+#pragma warning restore IDE1006 // Стили именования
+
         public MainView()
         {
             InitializeComponent();
@@ -91,8 +73,10 @@ namespace NIR.Views
             var current_bimage = new BitmapImage(new Uri("(gray).jpg", UriKind.RelativeOrAbsolute));
             int widthX=current_bimage.PixelWidth;
             int heightY=current_bimage.PixelHeight;
+#pragma warning disable IDE0018 // Объявление встроенной переменной
             int Stride;
-            byte[] bData = imageToByteArray(new Bitmap("(gray).jpg"),out Stride);
+#pragma warning restore IDE0018 // Объявление встроенной переменной
+            byte[] bData = ImageToByteArray(new Bitmap("(gray).jpg"),out Stride);
             //System.Drawing.Image asdfa = new Bitmap("./(gray).jpg");
             
             var count_bData=bData.Count();
@@ -100,11 +84,9 @@ namespace NIR.Views
             byte max=255;
             Stack<int> X = new Stack<int>();
             Stack<int> Y = new Stack<int>();
-            int ara;
             int c_pixels = 0;
             int y;
             int x;
-            int i = -3;
             for (y = 0; y < heightY; y++)
             {
                 x = 0;
@@ -158,14 +140,16 @@ namespace NIR.Views
                 System.Windows.Point pos = e.GetPosition(this.DrawCanvas);
                 if (this.lastShapeAsLine == null)
                 {
-                    Line line = new Line();
-                    //line.Style = DrawTool.CalculatePolylineStyle(this.CurrentBrush, this.CurrentLineWidth);
-                    line.StrokeThickness = 20;
-                    
-                    line.X1=this.mousePos.Value.X;
-                    line.Y1 = this.mousePos.Value.Y;
-                    line.Stroke = System.Windows.Media.Brushes.Blue;
-                    line.Tag = ShapeTag.None;
+                    Line line = new Line
+                    {
+                        //line.Style = DrawTool.CalculatePolylineStyle(this.CurrentBrush, this.CurrentLineWidth);
+                        StrokeThickness = 20,
+
+                        X1 = this.mousePos.Value.X,
+                        Y1 = this.mousePos.Value.Y,
+                        Stroke = System.Windows.Media.Brushes.Blue,
+                        Tag = ShapeTag.None
+                    };
                     this.lastShape = line;
                     this.DrawCanvas.Children.Add(line);
                     
@@ -225,7 +209,7 @@ namespace NIR.Views
         {
             this.SetToolType(DrawToolType.Pointer);
             //this.isGradientCB.IsEnabled = true;
-            this.UpdateButtons();
+            this.updateButtons();
         }
         public static RoutedCommand AddPolyline { get; set; }
         private void cmd_AddPolyline(object sender, RoutedEventArgs e)
@@ -242,9 +226,9 @@ namespace NIR.Views
                 //this.selectedTool.CurrentBrush = b;
             }
 
-            this.UpdateButtons();
+            this.updateButtons();
         }
-        private void UpdateButtons()
+        private void updateButtons()
         {
             this.DoLine.IsChecked = this.ToolType == DrawToolType.Polyline;
         }

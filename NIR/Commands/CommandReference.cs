@@ -16,7 +16,7 @@ namespace NIR.Commands
             // Blank
         }
 
-        public static readonly DependencyProperty CommandProperty = DependencyProperty.Register("Command", typeof(ICommand), typeof(CommandReference), new PropertyMetadata(new PropertyChangedCallback(OnCommandChanged)));
+        public static readonly DependencyProperty CommandProperty = DependencyProperty.Register("Command", typeof(ICommand), typeof(CommandReference), new PropertyMetadata(new PropertyChangedCallback(onCommandChanged)));
 
         public ICommand Command
         {
@@ -40,17 +40,15 @@ namespace NIR.Commands
 
         public event EventHandler CanExecuteChanged;
 
-        private static void OnCommandChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private static void onCommandChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             CommandReference commandReference = d as CommandReference;
-            ICommand oldCommand = e.OldValue as ICommand;
-            ICommand newCommand = e.NewValue as ICommand;
 
-            if (oldCommand != null)
+            if (e.OldValue is ICommand oldCommand)
             {
                 oldCommand.CanExecuteChanged -= commandReference.CanExecuteChanged;
             }
-            if (newCommand != null)
+            if (e.NewValue is ICommand newCommand)
             {
                 newCommand.CanExecuteChanged += commandReference.CanExecuteChanged;
             }
