@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Windows;
 using System.Windows.Input;
 
 namespace NIR.Commands
 {
+
     /// <summary>
     ///     This class allows delegating the commanding logic to methods passed as parameters,
     ///     and enables a View to bind commands to objects that are not part of the element tree.
@@ -13,151 +13,143 @@ namespace NIR.Commands
     {
         #region Constructors
 
-            /// <summary>
-            ///     Constructor
-            /// </summary>
-            public DelegateCommand(Action executeMethod)
-                : this(executeMethod, null, false)
-            {
-            }
+        /// <summary>
+        ///     Constructor
+        /// </summary>
+        public DelegateCommand(Action executeMethod)
+            : this(executeMethod, null, false)
+        {
+        }
 
-            /// <summary>
-            ///     Constructor
-            /// </summary>
-            public DelegateCommand(Action executeMethod, Func<bool> canExecuteMethod)
-                : this(executeMethod, canExecuteMethod, false)
-            {
-            }
+        /// <summary>
+        ///     Constructor
+        /// </summary>
+        public DelegateCommand(Action executeMethod, Func<bool> canExecuteMethod)
+            : this(executeMethod, canExecuteMethod, false)
+        {
+        }
 
-            /// <summary>
-            ///     Constructor
-            /// </summary>
-            public DelegateCommand(Action executeMethod, Func<bool> canExecuteMethod, bool isAutomaticRequeryDisabled)
-            {
-                if (executeMethod == null)
-                {
-                    throw new ArgumentNullException("executeMethod");
-                }
-
-                _executeMethod = executeMethod;
-                _canExecuteMethod = canExecuteMethod;
-                _isAutomaticRequeryDisabled = isAutomaticRequeryDisabled;
-            }
+        /// <summary>
+        ///     Constructor
+        /// </summary>
+        public DelegateCommand(Action executeMethod, Func<bool> canExecuteMethod, bool isAutomaticRequeryDisabled)
+        {
+            _executeMethod = executeMethod ?? throw new ArgumentNullException("executeMethod");
+            _canExecuteMethod = canExecuteMethod;
+            _isAutomaticRequeryDisabled = isAutomaticRequeryDisabled;
+        }
 
         #endregion
 
         #region Public Methods
 
-            /// <summary>
-            ///     Method to determine if the command can be executed
-            /// </summary>
-            public bool CanExecute()
+        /// <summary>
+        ///     Method to determine if the command can be executed
+        /// </summary>
+        public bool CanExecute()
+        {
+            if (_canExecuteMethod != null)
             {
-                if (_canExecuteMethod != null)
-                {
-                    return _canExecuteMethod();
-                }
-                return true;
+                return _canExecuteMethod();
             }
+            return true;
+        }
 
-            /// <summary>
-            ///     Execution of the command
-            /// </summary>
-            public void Execute()
+        /// <summary>
+        ///     Execution of the command
+        /// </summary>
+        public void Execute()
+        {
+            _executeMethod?.Invoke();
+        }
+
+        /// <summary>
+        ///     Property to enable or disable CommandManager's automatic requery on this command
+        /// </summary>
+        public bool IsAutomaticRequeryDisabled
+        {
+            get
             {
-                if (_executeMethod != null)
-                {
-                    _executeMethod();
-                }
+                return _isAutomaticRequeryDisabled;
             }
-
-            /// <summary>
-            ///     Property to enable or disable CommandManager's automatic requery on this command
-            /// </summary>
-            public bool IsAutomaticRequeryDisabled
+            set
             {
-                get
+                if (_isAutomaticRequeryDisabled != value)
                 {
-                    return _isAutomaticRequeryDisabled;
-                }
-                set
-                {
-                    if (_isAutomaticRequeryDisabled != value)
+                    if (value)
                     {
-                        if (value)
-                        {
-                            CommandManagerHelper.RemoveHandlersFromRequerySuggested(_canExecuteChangedHandlers);
-                        }
-                        else
-                        {
-                            CommandManagerHelper.AddHandlersToRequerySuggested(_canExecuteChangedHandlers);
-                        }
-                        _isAutomaticRequeryDisabled = value;
+                        CommandManagerHelper.RemoveHandlersFromRequerySuggested(_canExecuteChangedHandlers);
                     }
+                    else
+                    {
+                        CommandManagerHelper.AddHandlersToRequerySuggested(_canExecuteChangedHandlers);
+                    }
+                    _isAutomaticRequeryDisabled = value;
                 }
             }
+        }
 
-            /// <summary>
-            ///     Raises the CanExecuteChaged event
-            /// </summary>
-            public void RaiseCanExecuteChanged()
-            {
-                OnCanExecuteChanged();
-            }
+        /// <summary>
+        ///     Raises the CanExecuteChaged event
+        /// </summary>
+        public void RaiseCanExecuteChanged()
+        {
+            OnCanExecuteChanged();
+        }
 
-            /// <summary>
-            ///     Protected virtual method to raise CanExecuteChanged event
-            /// </summary>
-            protected virtual void OnCanExecuteChanged()
-            {
-                CommandManagerHelper.CallWeakReferenceHandlers(_canExecuteChangedHandlers);
-            }
+        /// <summary>
+        ///     Protected virtual method to raise CanExecuteChanged event
+        /// </summary>
+        protected virtual void OnCanExecuteChanged()
+        {
+            CommandManagerHelper.CallWeakReferenceHandlers(_canExecuteChangedHandlers);
+        }
 
         #endregion
 
         #region ICommand Members
 
-            /// <summary>
-            ///     ICommand.CanExecuteChanged implementation
-            /// </summary>
-            public event EventHandler CanExecuteChanged
+        /// <summary>
+        ///     ICommand.CanExecuteChanged implementation
+        /// </summary>
+        public event EventHandler CanExecuteChanged
+        {
+            add
             {
-                add
+                if (!_isAutomaticRequeryDisabled)
                 {
-                    if (!_isAutomaticRequeryDisabled)
-                    {
-                        CommandManager.RequerySuggested += value;
-                    }
-                    CommandManagerHelper.AddWeakReferenceHandler(ref _canExecuteChangedHandlers, value, 2);
+                    CommandManager.RequerySuggested += value;
                 }
-                remove
+                CommandManagerHelper.AddWeakReferenceHandler(ref _canExecuteChangedHandlers, value, 2);
+            }
+            remove
+            {
+                if (!_isAutomaticRequeryDisabled)
                 {
-                    if (!_isAutomaticRequeryDisabled)
-                    {
-                        CommandManager.RequerySuggested -= value;
-                    }
-                    CommandManagerHelper.RemoveWeakReferenceHandler(_canExecuteChangedHandlers, value);
+                    CommandManager.RequerySuggested -= value;
                 }
+                CommandManagerHelper.RemoveWeakReferenceHandler(_canExecuteChangedHandlers, value);
             }
+        }
 
-            bool ICommand.CanExecute(object parameter)
-            {
-                return CanExecute();
-            }
+        bool ICommand.CanExecute(object parameter)
+        {
+            return CanExecute();
+        }
 
-            void ICommand.Execute(object parameter)
-            {
-                Execute();
-            }
+        void ICommand.Execute(object parameter)
+        {
+            Execute();
+        }
 
         #endregion
 
         #region Data
 
-            private readonly Action _executeMethod = null;
-            private readonly Func<bool> _canExecuteMethod = null;
-            private bool _isAutomaticRequeryDisabled = false;
-            private List<WeakReference> _canExecuteChangedHandlers;
+        private readonly Action _executeMethod = null;
+        private readonly Func<bool> _canExecuteMethod = null;
+        private bool _isAutomaticRequeryDisabled = false;
+        private List<WeakReference> _canExecuteChangedHandlers;
 
         #endregion
     }
@@ -171,159 +163,151 @@ namespace NIR.Commands
     {
         #region Constructors
 
-            /// <summary>
-            ///     Constructor
-            /// </summary>
-            public DelegateCommand(Action<T> executeMethod)
-                : this(executeMethod, null, false)
-            {
-            }
+        /// <summary>
+        ///     Constructor
+        /// </summary>
+        public DelegateCommand(Action<T> executeMethod)
+            : this(executeMethod, null, false)
+        {
+        }
 
-            /// <summary>
-            ///     Constructor
-            /// </summary>
-            public DelegateCommand(Action<T> executeMethod, Func<T, bool> canExecuteMethod)
-                : this(executeMethod, canExecuteMethod, false)
-            {
-            }
+        /// <summary>
+        ///     Constructor
+        /// </summary>
+        public DelegateCommand(Action<T> executeMethod, Func<T, bool> canExecuteMethod)
+            : this(executeMethod, canExecuteMethod, false)
+        {
+        }
 
-            /// <summary>
-            ///     Constructor
-            /// </summary>
-            public DelegateCommand(Action<T> executeMethod, Func<T, bool> canExecuteMethod, bool isAutomaticRequeryDisabled)
-            {
-                if (executeMethod == null)
-                {
-                    throw new ArgumentNullException("executeMethod");
-                }
-
-                _executeMethod = executeMethod;
-                _canExecuteMethod = canExecuteMethod;
-                _isAutomaticRequeryDisabled = isAutomaticRequeryDisabled;
-            }
+        /// <summary>
+        ///     Constructor
+        /// </summary>
+        public DelegateCommand(Action<T> executeMethod, Func<T, bool> canExecuteMethod, bool isAutomaticRequeryDisabled)
+        {
+            _executeMethod = executeMethod ?? throw new ArgumentNullException("executeMethod");
+            _canExecuteMethod = canExecuteMethod;
+            _isAutomaticRequeryDisabled = isAutomaticRequeryDisabled;
+        }
 
         #endregion
 
         #region Public Methods
 
-            /// <summary>
-            ///     Method to determine if the command can be executed
-            /// </summary>
-            public bool CanExecute(T parameter)
+        /// <summary>
+        ///     Method to determine if the command can be executed
+        /// </summary>
+        public bool CanExecute(T parameter)
+        {
+            if (_canExecuteMethod != null)
             {
-                if (_canExecuteMethod != null)
-                {
-                    return _canExecuteMethod(parameter);
-                }
-                return true;
+                return _canExecuteMethod(parameter);
             }
+            return true;
+        }
 
-            /// <summary>
-            ///     Execution of the command
-            /// </summary>
-            public void Execute(T parameter)
+        /// <summary>
+        ///     Execution of the command
+        /// </summary>
+        public void Execute(T parameter)
+        {
+            _executeMethod?.Invoke(parameter);
+        }
+
+        /// <summary>
+        ///     Raises the CanExecuteChaged event
+        /// </summary>
+        public void RaiseCanExecuteChanged()
+        {
+            OnCanExecuteChanged();
+        }
+
+        /// <summary>
+        ///     Protected virtual method to raise CanExecuteChanged event
+        /// </summary>
+        protected virtual void OnCanExecuteChanged()
+        {
+            CommandManagerHelper.CallWeakReferenceHandlers(_canExecuteChangedHandlers);
+        }
+
+        /// <summary>
+        ///     Property to enable or disable CommandManager's automatic requery on this command
+        /// </summary>
+        public bool IsAutomaticRequeryDisabled
+        {
+            get
             {
-                if (_executeMethod != null)
-                {
-                    _executeMethod(parameter);
-                }
+                return _isAutomaticRequeryDisabled;
             }
-
-            /// <summary>
-            ///     Raises the CanExecuteChaged event
-            /// </summary>
-            public void RaiseCanExecuteChanged()
+            set
             {
-                OnCanExecuteChanged();
-            }
-
-            /// <summary>
-            ///     Protected virtual method to raise CanExecuteChanged event
-            /// </summary>
-            protected virtual void OnCanExecuteChanged()
-            {
-                CommandManagerHelper.CallWeakReferenceHandlers(_canExecuteChangedHandlers);
-            }
-
-            /// <summary>
-            ///     Property to enable or disable CommandManager's automatic requery on this command
-            /// </summary>
-            public bool IsAutomaticRequeryDisabled
-            {
-                get
+                if (_isAutomaticRequeryDisabled != value)
                 {
-                    return _isAutomaticRequeryDisabled;
-                }
-                set
-                {
-                    if (_isAutomaticRequeryDisabled != value)
+                    if (value)
                     {
-                        if (value)
-                        {
-                            CommandManagerHelper.RemoveHandlersFromRequerySuggested(_canExecuteChangedHandlers);
-                        }
-                        else
-                        {
-                            CommandManagerHelper.AddHandlersToRequerySuggested(_canExecuteChangedHandlers);
-                        }
-                        _isAutomaticRequeryDisabled = value;
+                        CommandManagerHelper.RemoveHandlersFromRequerySuggested(_canExecuteChangedHandlers);
                     }
+                    else
+                    {
+                        CommandManagerHelper.AddHandlersToRequerySuggested(_canExecuteChangedHandlers);
+                    }
+                    _isAutomaticRequeryDisabled = value;
                 }
             }
+        }
 
         #endregion
 
         #region ICommand Members
 
-            /// <summary>
-            ///     ICommand.CanExecuteChanged implementation
-            /// </summary>
-            public event EventHandler CanExecuteChanged
+        /// <summary>
+        ///     ICommand.CanExecuteChanged implementation
+        /// </summary>
+        public event EventHandler CanExecuteChanged
+        {
+            add
             {
-                add
+                if (!_isAutomaticRequeryDisabled)
                 {
-                    if (!_isAutomaticRequeryDisabled)
-                    {
-                        CommandManager.RequerySuggested += value;
-                    }
-                    CommandManagerHelper.AddWeakReferenceHandler(ref _canExecuteChangedHandlers, value, 2);
+                    CommandManager.RequerySuggested += value;
                 }
-                remove
-                {
-                    if (!_isAutomaticRequeryDisabled)
-                    {
-                        CommandManager.RequerySuggested -= value;
-                    }
-                    CommandManagerHelper.RemoveWeakReferenceHandler(_canExecuteChangedHandlers, value);
-                }
+                CommandManagerHelper.AddWeakReferenceHandler(ref _canExecuteChangedHandlers, value, 2);
             }
+            remove
+            {
+                if (!_isAutomaticRequeryDisabled)
+                {
+                    CommandManager.RequerySuggested -= value;
+                }
+                CommandManagerHelper.RemoveWeakReferenceHandler(_canExecuteChangedHandlers, value);
+            }
+        }
 
-            bool ICommand.CanExecute(object parameter)
+        bool ICommand.CanExecute(object parameter)
+        {
+            // if T is of value type and the parameter is not
+            // set yet, then return false if CanExecute delegate
+            // exists, else return true
+            if (parameter == null &&
+                typeof(T).IsValueType)
             {
-                // if T is of value type and the parameter is not
-                // set yet, then return false if CanExecute delegate
-                // exists, else return true
-                if (parameter == null &&
-                    typeof(T).IsValueType)
-                {
-                    return (_canExecuteMethod == null);
-                }
-                return CanExecute((T)parameter);
+                return (_canExecuteMethod == null);
             }
+            return CanExecute((T)parameter);
+        }
 
-            void ICommand.Execute(object parameter)
-            {
-                Execute((T)parameter);
-            }
+        void ICommand.Execute(object parameter)
+        {
+            Execute((T)parameter);
+        }
 
         #endregion
 
         #region Data
 
-            private readonly Action<T> _executeMethod = null;
-            private readonly Func<T, bool> _canExecuteMethod = null;
-            private bool _isAutomaticRequeryDisabled = false;
-            private List<WeakReference> _canExecuteChangedHandlers;
+        private readonly Action<T> _executeMethod = null;
+        private readonly Func<T, bool> _canExecuteMethod = null;
+        private bool _isAutomaticRequeryDisabled = false;
+        private List<WeakReference> _canExecuteChangedHandlers;
 
         #endregion
     }
@@ -347,8 +331,7 @@ namespace NIR.Commands
                 for (int i = handlers.Count - 1; i >= 0; i--)
                 {
                     WeakReference reference = handlers[i];
-                    EventHandler handler = reference.Target as EventHandler;
-                    if (handler == null)
+                    if (!(reference.Target is EventHandler handler))
                     {
                         // Clean up old handlers that have been collected
                         handlers.RemoveAt(i);
@@ -375,8 +358,7 @@ namespace NIR.Commands
             {
                 foreach (WeakReference handlerRef in handlers)
                 {
-                    EventHandler handler = handlerRef.Target as EventHandler;
-                    if (handler != null)
+                    if (handlerRef.Target is EventHandler handler)
                     {
                         CommandManager.RequerySuggested += handler;
                     }
@@ -390,8 +372,7 @@ namespace NIR.Commands
             {
                 foreach (WeakReference handlerRef in handlers)
                 {
-                    EventHandler handler = handlerRef.Target as EventHandler;
-                    if (handler != null)
+                    if (handlerRef.Target is EventHandler handler)
                     {
                         CommandManager.RequerySuggested -= handler;
                     }
@@ -421,8 +402,7 @@ namespace NIR.Commands
                 for (int i = handlers.Count - 1; i >= 0; i--)
                 {
                     WeakReference reference = handlers[i];
-                    EventHandler existingHandler = reference.Target as EventHandler;
-                    if ((existingHandler == null) || (existingHandler == handler))
+                    if ((!(reference.Target is EventHandler existingHandler)) || (existingHandler == handler))
                     {
                         // Clean up old handlers that have been collected
                         // in addition to the handler that is to be removed.

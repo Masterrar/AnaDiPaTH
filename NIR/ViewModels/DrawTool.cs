@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
 using System.Windows.Markup;
 using System.Windows.Media;
 using System.Windows.Shapes;
@@ -35,9 +31,10 @@ namespace NIR.ViewModels
         public static Style CalculatePolylineStyle(Brush brush, double stroke)
         {
             Brush b = (VisualBrush)XamlReader.Parse(DrawTool.HatchBrushXaml);
-            Style style = new Style();
-
-            style.TargetType = typeof(Line);
+            Style style = new Style
+            {
+                TargetType = typeof(Line)
+            };
             style.Setters.Add(new Setter(Line.StrokeProperty, brush));
             style.Setters.Add(new Setter(Line.StrokeThicknessProperty, stroke));
             style.Setters.Add(new Setter(Line.StrokeLineJoinProperty, PenLineJoin.Round));
