@@ -2,4 +2,10 @@
 # Данный GITIGNORE-файл был автоматически создан Microsoft(R) Visual Studio.
 ################################################################################
 
-/.vs/NIR/v15
+/.vs
+/NIR/bin
+/NIR/bin/Debug
+/NIR/bin/Release
+/NIR/obj
+/NIR/obj/Debug
+/NIR/obj/Release
