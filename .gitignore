@@ -9,3 +9,4 @@
 /NIR/obj
 /NIR/obj/Debug
 /NIR/obj/Release
+*.cache
