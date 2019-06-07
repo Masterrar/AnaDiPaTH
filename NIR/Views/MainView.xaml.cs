@@ -92,9 +92,6 @@ namespace NIR.Views
                 x = 0;
                 for (x = 0; x < widthX; x=x+1)
                 {
-
-
-
                     var midR = bData[y * Stride + x * 3]; 
                     var midG = bData[y * Stride + x * 3 + 1];
                     var midB = bData[y * Stride + x * 3 + 2];
@@ -118,8 +115,7 @@ namespace NIR.Views
             DrawCanvas.Height = ib.ImageSource.Height;
             DrawCanvas.Width = ib.ImageSource.Width;
             DrawCanvas.Background = ib;
-            this.Width = ib.ImageSource.Width;
-            this.Height = ib.ImageSource.Height;
+
             //canvas = DrawCanvas;
             window = this;
 
