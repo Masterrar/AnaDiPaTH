@@ -1,14 +1,14 @@
 ﻿<Window x:Class="NIR.Views.MainView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="MainView">
+        Title="MainView" SizeToContent="WidthAndHeight">
     <!--<Window.CommandBindings>
 
         <CommandBinding Command="NIR:Commands.Pointer" Executed="cmd_Pointer" />
         <CommandBinding Command="NIR:Commands.AddPolyline" Executed="cmd_AddPolyline" />
         
     </Window.CommandBindings>-->
-    <DockPanel>
+    <DockPanel >
         <Expander DockPanel.Dock="Top"    Canvas.Left="19" Canvas.Top="39" IsExpanded="True">
             <ToggleButton x:Name="DoLine"   Width="58" Height="42" HorizontalAlignment="Left" Padding="10" Content="Линия" Checked="cmd_AddPolyline" />
         </Expander>

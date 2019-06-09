@@ -33,6 +33,8 @@ namespace NIR.Views
     /// 
     public partial class MainView : Window
     {
+        private double Xmid { get; set; } = 0;
+        private double Ymid { get; set; } = 0;
         public byte[] ImageToByteArray(Bitmap bmp,out int stride )
         {
             var pxf = System.Drawing.Imaging.PixelFormat.Format24bppRgb;
@@ -70,13 +72,13 @@ namespace NIR.Views
         {
             InitializeComponent();
             ImageBrush ib = new ImageBrush();
-            var current_bimage = new BitmapImage(new Uri("(gray).jpg", UriKind.RelativeOrAbsolute));
+            var current_bimage = new BitmapImage(new Uri("C:\\_Projects\\AnaDiPaTH\\NIR\\Resources\\(gray).JPG"));
             int widthX=current_bimage.PixelWidth;
             int heightY=current_bimage.PixelHeight;
 #pragma warning disable IDE0018 // Объявление встроенной переменной
             int Stride;
 #pragma warning restore IDE0018 // Объявление встроенной переменной
-            byte[] bData = ImageToByteArray(new Bitmap("(gray).jpg"),out Stride);
+            byte[] bData = ImageToByteArray(new Bitmap("C:\\_Projects\\AnaDiPaTH\\NIR\\Resources\\(gray).JPG"),out Stride);
             //System.Drawing.Image asdfa = new Bitmap("./(gray).jpg");
             
             var count_bData=bData.Count();
@@ -107,18 +109,38 @@ namespace NIR.Views
                     }
                 }
             }
-            var midX = X.Sum() / c_pixels;
-            var midY = Y.Sum() / c_pixels;
+            Xmid = X.Sum() / c_pixels;
+            Ymid = Y.Sum() / c_pixels;
             
-               
+            
             ib.ImageSource = current_bimage;
-            DrawCanvas.Height = ib.ImageSource.Height;
-            DrawCanvas.Width = ib.ImageSource.Width;
+            var h = DrawCanvas.Height;
+            var w = DrawCanvas.Width;
+
+            resizeIfSoLarge(out h,out w, ib.ImageSource.Height, ib.ImageSource.Width);
+
+
+            DrawCanvas.Height = h;
+            DrawCanvas.Width = w;
             DrawCanvas.Background = ib;
 
             //canvas = DrawCanvas;
             window = this;
 
+        }
+
+        private void resizeIfSoLarge(   out double resultHeight , out double resultWidth,
+                                        double currentHeight    , double currentWidth)
+        {
+            var h = currentHeight;
+            var w = currentWidth;
+            //while (h > 1050.0 || w > 1300.0)
+            //{
+            //    h /= 1.5;
+            //    w /= 1.5;
+            //}
+            resultHeight = h;
+            resultWidth = w;
         }
         private void polylineToolMouseDown(object sender, MouseButtonEventArgs e)
         {
@@ -133,16 +155,21 @@ namespace NIR.Views
         {
             if (e.LeftButton == MouseButtonState.Pressed && this.mousePos.HasValue)
             {
+                //Берем координаты мыши
                 System.Windows.Point pos = e.GetPosition(this.DrawCanvas);
+                // Если не над чем работать, создаем над чем работать.
                 if (this.lastShapeAsLine == null)
                 {
                     Line line = new Line
                     {
                         //line.Style = DrawTool.CalculatePolylineStyle(this.CurrentBrush, this.CurrentLineWidth);
-                        StrokeThickness = 20,
+                        StrokeThickness = 5,
 
-                        X1 = this.mousePos.Value.X,
-                        Y1 = this.mousePos.Value.Y,
+                        X1 = pos.X,
+                        Y1 = pos.Y,
+                        X2 = Xmid + (Xmid - this.mousePos.Value.X),
+                        Y2 = Ymid + (Ymid - this.mousePos.Value.Y),
+
                         Stroke = System.Windows.Media.Brushes.Blue,
                         Tag = ShapeTag.None
                     };
@@ -150,9 +177,12 @@ namespace NIR.Views
                     this.DrawCanvas.Children.Add(line);
                     
                 }
+                // Производим работу, а тобишь присваиваем координаты точка линии, чтобы она двигалась по кругу.
+                this.lastShapeAsLine.X1 = pos.X;
+                this.lastShapeAsLine.Y1 = pos.Y;
 
-                this.lastShapeAsLine.X2 = pos.X;
-                this.lastShapeAsLine.Y2 = pos.Y;
+                this.lastShapeAsLine.X2 = Xmid + (Xmid - pos.X);
+                this.lastShapeAsLine.Y2 = Ymid + (Ymid - pos.Y);
             }
         }
 
@@ -195,9 +225,9 @@ namespace NIR.Views
             this.ToolType = type;
 
             Mouse.AddMouseDownHandler(this.DrawCanvas, this.polylineToolMouseDown);
-                    Mouse.AddMouseUpHandler(this, this.polylineToolMouseUp);
-                    Mouse.AddMouseMoveHandler(this, this.polylineToolMouseMove);
-                    this.DrawCanvas.Cursor = Cursors.Cross;
+            Mouse.AddMouseUpHandler(this, this.polylineToolMouseUp);
+            Mouse.AddMouseMoveHandler(this, this.polylineToolMouseMove);
+            this.DrawCanvas.Cursor = Cursors.Cross;
             
         }
         private DrawTool selectedTool;
