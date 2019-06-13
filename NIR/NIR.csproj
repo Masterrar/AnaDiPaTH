@@ -74,6 +74,7 @@
     <Compile Include="Model\Tool\Shape\LineM.cs" />
     <Compile Include="Model\Tool\Shape\MiddlePointM.cs" />
     <Compile Include="Model\Tool\Shape\PointM.cs" />
+    <Compile Include="ShapesHelper.cs" />
     <Compile Include="ViewModels\DrawTool.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -97,6 +98,7 @@
     <Compile Include="ViewModel\MainVM.cs" />
     <Compile Include="ViewModel\Processing\ProcessingVM.cs" />
     <Compile Include="ViewModel\Result\ResultVM.cs" />
+    <Compile Include="Views\DrawToolDots.cs" />
     <Compile Include="Views\MainView.xaml.cs">
       <DependentUpon>MainView.xaml</DependentUpon>
     </Compile>

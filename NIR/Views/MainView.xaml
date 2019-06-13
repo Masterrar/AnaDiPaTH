@@ -8,10 +8,31 @@
         <CommandBinding Command="NIR:Commands.AddPolyline" Executed="cmd_AddPolyline" />
         
     </Window.CommandBindings>-->
-    <DockPanel >
-        <Expander DockPanel.Dock="Top"    Canvas.Left="19" Canvas.Top="39" IsExpanded="True">
-            <ToggleButton x:Name="DoLine"   Width="58" Height="42" HorizontalAlignment="Left" Padding="10" Content="Линия" Checked="cmd_AddPolyline" />
-        </Expander>
-        <Canvas  x:Name="DrawCanvas" ScrollViewer.CanContentScroll="True" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" Margin="10"></Canvas>
-    </DockPanel>
+    <Grid>
+        
+        <DockPanel >
+            <Expander DockPanel.Dock="Top"    Canvas.Left="19" Canvas.Top="39" IsExpanded="True">
+                <WrapPanel>
+                <ToggleButton x:Name="DoLine"   Width="58" Height="42" HorizontalAlignment="Left" Padding="10" Content="Линия" Checked="cmd_AddPolyline" />
+                <ToggleButton x:Name="DoPointer"   Width="58" Height="42" HorizontalAlignment="Left" Padding="10" Content="Указатель" Checked="cmd_Pointer" />
+                </WrapPanel>
+            </Expander>
+            <Canvas x:Name="workspace">
+                <Canvas.Background>
+                    <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.AppWorkspaceColorKey}}" />
+                </Canvas.Background>
+
+                <Border x:Name="border" BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Center" Height="600" Margin="0" VerticalAlignment="Center" Width="800" Padding="0" Canvas.Left="5" Canvas.Top="5">
+                    <Border.Effect>
+                        <DropShadowEffect Opacity="0.7" ShadowDepth="4" />
+                    </Border.Effect>
+                    
+                    <Canvas x:Name="DrawCanvas" Background="White" Margin="0" ClipToBounds="True">
+                    </Canvas>
+
+                </Border>
+            </Canvas>
+        </DockPanel>
+    </Grid>
+    
 </Window>

@@ -35,7 +35,7 @@ namespace NIR.ViewModels
             {
                 TargetType = typeof(Line)
             };
-            style.Setters.Add(new Setter(Line.StrokeProperty, brush));
+            //style.Setters.Add(new Setter(Line.StrokeProperty, brush));
             style.Setters.Add(new Setter(Line.StrokeThicknessProperty, stroke));
             style.Setters.Add(new Setter(Line.StrokeLineJoinProperty, PenLineJoin.Round));
 

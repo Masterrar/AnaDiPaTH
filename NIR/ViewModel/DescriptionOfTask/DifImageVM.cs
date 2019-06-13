@@ -54,7 +54,7 @@ namespace ViewModel.DescriptionOfTask
         {
             get
             {
-                if (_midPoint == null)
+                if (_midPoint.IsEmpty)
                 {
                     _midPoint = getMidPoint();
                 }
@@ -120,7 +120,7 @@ namespace ViewModel.DescriptionOfTask
             var rect = new System.Drawing.Rectangle(0, 0, bmp.Width, bmp.Height);
             //Блокируем набор данных изображения в памяти
             BitmapData bmpData = bmp.LockBits(rect, ImageLockMode.ReadWrite, pxf);
-            Stride = bmpData.Stride;
+            _stride = bmpData.Stride;
             // Получаем адрес первой линии.
             IntPtr ptr = bmpData.Scan0;
 
