@@ -142,7 +142,7 @@ namespace NIR.Views
                     Mouse.RemoveMouseMoveHandler(this.dotsControl, this.dotsControl_MouseMove);
                     this.selectShapes(null);
                     break;
-                case DrawToolType.Polyline:
+                case DrawToolType.Line:
                     Mouse.RemoveMouseDownHandler(this.DrawCanvas, this.polylineToolMouseDown);
                     Mouse.RemoveMouseUpHandler(this.window, this.polylineToolMouseUp);
                     Mouse.RemoveMouseMoveHandler(this.window, this.polylineToolMouseMove);
@@ -165,7 +165,7 @@ namespace NIR.Views
                     Keyboard.AddKeyUpHandler(this.window, this.toolKeyUp);
                     break;
 
-                case DrawToolType.Polyline:
+                case DrawToolType.Line:
                     Mouse.AddMouseDownHandler(this.DrawCanvas, this.polylineToolMouseDown);
                     Mouse.AddMouseUpHandler(this.window, this.polylineToolMouseUp);
                     Mouse.AddMouseMoveHandler(this.window, this.polylineToolMouseMove);
@@ -211,14 +211,14 @@ namespace NIR.Views
                     if (sett != null && sett.Count() > 0)
                         this.CurrentBrush = (sett.First().Value as Brush);
                 }
-                else if (s is Polyline)
+                else if (s is Line)
                 {
                     Style style = s.Style;
-                    var sett = style.Setters.OfType<Setter>().Where(ss => ss.Property == Polyline.StrokeProperty);
+                    var sett = style.Setters.OfType<Setter>().Where(ss => ss.Property == Line.StrokeProperty);
                     if (sett != null && sett.Count() > 0)
                         this.CurrentBrush = (sett.First().Value as Brush);
 
-                    sett = style.Setters.OfType<Setter>().Where(ss => ss.Property == Polyline.StrokeThicknessProperty);
+                    sett = style.Setters.OfType<Setter>().Where(ss => ss.Property == Line.StrokeThicknessProperty);
                     if (sett != null && sett.Count() > 0)
                         this.CurrentLineWidth = (double)sett.First().Value;
                 }

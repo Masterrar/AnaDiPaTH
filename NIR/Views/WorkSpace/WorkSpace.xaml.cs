@@ -41,26 +41,23 @@ namespace NIR.Views
         //TODO: это не корректно. На самом деле нужно передавать WorkCanvas функцию для того, чтобы она обновлял кнопки. А не вот так.
         public void updateButtons()
         {
-            this.DoLine.IsChecked = this.ToolType == DrawToolType.Polyline;
+            this.DoLine.IsChecked = this.ToolType == DrawToolType.Line;
         }
         private void cmd_Pointer(object sender, RoutedEventArgs e)
         {
             this.SetToolType(DrawToolType.Pointer);
             //this.isGradientCB.IsEnabled = true;
-            this.updateButtons();
+            this.updateButtons(); 
         }
         public static RoutedCommand AddPolyline { get; set; }
         private void cmd_AddPolyline(object sender, RoutedEventArgs e)
         {
-            if (this.ToolType == DrawToolType.Polyline)
-                this.SetToolType(DrawToolType.Pointer);
-            else
-            {
-                this.SetToolType(DrawToolType.Polyline);
+            
+                this.SetToolType(DrawToolType.Line);
 
 
                 //this.CurrentBrush = b;
-            }
+            
 
             this.updateButtons();
         }

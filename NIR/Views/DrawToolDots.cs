@@ -52,14 +52,14 @@ namespace NIR.Tools
 
             if (shape != null)
             {
-                var sett = shape.Style.Setters.OfType<Setter>().Where(ss => ss.Property == Polyline.StrokeThicknessProperty);
+                var sett = shape.Style.Setters.OfType<Setter>().Where(ss => ss.Property == Line.StrokeThicknessProperty);
                 if (sett != null && sett.Count() > 0)
                     this.DotSize = 9 + (double)sett.First().Value;
 
                 if (shape is Path)
                     this.setRectangleSource(shape as Path);
-                else if (shape is Polyline)
-                    this.setPolylineSource(shape as Polyline);
+                else if (shape is Line)
+                    this.setPolylineSource(shape as Line);
             }
         }
 
@@ -88,9 +88,9 @@ namespace NIR.Tools
             this.Dots.AddPoints(this, result);
         }
 
-        private void setPolylineSource(Polyline p)
+        private void setPolylineSource(Line p)
         {
-            this.Dots.AddPoints(this, p.Points);
+            this.Dots.AddPoints(this, p.Points());
         }
 
     }
@@ -224,7 +224,7 @@ namespace NIR.Tools
     }
 
     /// <summary>
-    /// Конвертер для привязки координат TopLeft прямоугольников DrawToolDots к координатам Path или Polyline. Сдвигает координаты прямоугольника, так чтобы центр приходился на координаты точки фигуры.
+    /// Конвертер для привязки координат TopLeft прямоугольников DrawToolDots к координатам Path или Line. Сдвигает координаты прямоугольника, так чтобы центр приходился на координаты точки фигуры.
     /// </summary>
     public class PointsToDotsCoorsConverter : IMultiValueConverter
     {

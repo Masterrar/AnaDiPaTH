@@ -26,7 +26,7 @@ namespace NIR.Views
         None = 0,
         Pointer,
         Rectangle,
-        Polyline,
+        Line,
         Delete
     }
 

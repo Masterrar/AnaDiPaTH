@@ -1,4 +1,5 @@
-﻿using NIR.Tools;
+﻿using NIR.ShapesExtension;
+using NIR.Tools;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -50,12 +51,13 @@ namespace NIR.Views
             {
                 var intersectedDots = this.dots.Dots
                         .Where(d => Math.Abs(d.DotID - this.selectedDot.DotID) == 1 && DrawToolDot.IsDotsIntersect(this.selectedDot, d));
-                if (this.selectedDot.Parent.Source is Polyline)
+                if (this.selectedDot.Parent.Source is Line)
                 {
                     if (intersectedDots.Count() > 0)
                     {
-                        Polyline line = this.selectedDot.Parent.Source as Polyline;
-                        if (intersectedDots.Count() == line.Points.Count - 1)
+                        Line line = this.selectedDot.Parent.Source as Line;
+                        var PointsList = line.Points();
+                        if (intersectedDots.Count() == PointsList.Count - 1)
                         {
                             this.DrawCanvas.Children.Remove(line);
                             this.selectShape(null);
@@ -65,7 +67,7 @@ namespace NIR.Views
                             int i = 0;
                             foreach (var dot in intersectedDots.OrderBy(d => d.DotID))
                             {
-                                line.Points.RemoveAt(dot.DotID + i);
+                                PointsList.RemoveAt(dot.DotID + i);
                                 i--;
                             }
                             this.dots.SetSource(line);

@@ -123,17 +123,18 @@ namespace NIR.Views
                 }
                 else if (e.ClickCount > 1 && this.Selection.Count == 1) // двойной щелчок по линии
                 {
-                    Polyline line = this.Selection.First() as Polyline;
+                    Line line = this.Selection.First() as Line;
+                    var PointsLine = line.Points();
                     if (line != null)
                     {
                         Point topleft = e.GetPosition(this.DrawCanvas);
                         topleft.Offset(-2, -2); // немного расширяем область для более комфортного нажатия на линию
                         Point bottomright = new Point(topleft.X + 5, topleft.Y + 5);
-                        for (int i = line.Points.Count - 1; i >= 1; i--)
+                        for (int i = PointsLine.Count - 1; i >= 1; i--)
                         {
-                            if (ShapesHelper.CheckLineLineIntersection(topleft, bottomright, line.Points[i - 1], line.Points[i]))
+                            if (ShapesHelper.CheckLineLineIntersection(topleft, bottomright, PointsLine[i - 1], PointsLine[i]))
                             {
-                                line.Points.Insert(i, topleft);
+                                PointsLine.Insert(i, topleft);
                                 this.dots.SetSource(line);
                                 break;
                             }
@@ -172,14 +173,15 @@ namespace NIR.Views
                 Point lastPos = Mouse.GetPosition(this.window);
                 if (lastPos == this.mousePos.Value)
                     return;
-
-                if (this.border.Visibility == Visibility.Visible) // Выделение
+                //TODO: Refactoring
+                //if (this.border.Visibility == Visibility.Visible) // Выделение
+                //{
+                //    this.toolSelection(lastPos);
+                //}
+                //else 
+                if (this.selectedDot != null) // Трансформация
                 {
-                    this.toolSelection(lastPos);
-                }
-                else if (this.selectedDot != null) // Трансформация
-                {
-                    if (this.selectedDot.Parent.Source is Polyline) // перемещеине узлов линий
+                    if (this.selectedDot.Parent.Source is Line) // перемещеине узлов линий
                     {
                         this.toolPolylineTransform(lastPos);
                     }
@@ -259,14 +261,15 @@ namespace NIR.Views
                             (s as Path).SetTopLeft(pt);
                     }
                 }
-                else if (s is Polyline)
+                else if (s is Line)
                 {
-                    Polyline line = (s as Polyline);
-                    for (int i = 0; i < line.Points.Count; i++)
+                    Line line = (s as Line);
+                    var PointsLine = line.Points();
+                    for (int i = 0; i < PointsLine.Count; i++)
                     {
-                        Point pt = line.Points[i];
+                        Point pt = PointsLine[i];
                         pt.Offset(move.X, move.Y);
-                        line.Points[i] = pt;
+                        PointsLine[i] = pt;
                     }
                 }
             });
@@ -495,12 +498,39 @@ namespace NIR.Views
         {
             Point move = new Point(lastPos.X - this.mousePos.Value.X, lastPos.Y - this.mousePos.Value.Y);
 
-            Polyline line = this.selectedDot.Parent.Source as Polyline;
+            Line line = this.selectedDot.Parent.Source as Line;
+            var PointsLine = line.Points();
+            //Point pt = PointsLine[this.selectedDot.DotID];
+            //pt.Offset(move.X, move.Y);
+            //PointsLine[this.selectedDot.DotID] = pt;
+            //TODO: refactoring
+            if (this.selectedDot.DotID == 0)
+            {
+                Point pt1 = new Point(line.X1, line.Y1);
+                pt1.Offset(move.X, move.Y);
+                line.X1 = pt1.X;
+                line.Y1 = pt1.Y;
+                Point pt2 = new Point(line.X2, line.Y2);
+                pt2.Offset(-move.X, -move.Y);
+                line.X2 = pt2.X;
+                line.Y2 = pt2.Y;
+            }
+            else if (this.selectedDot.DotID == 1)
+            {
+                Point pt1 = new Point(line.X1, line.Y1);
+                pt1.Offset(-move.X, -move.Y);
+                line.X1 = pt1.X;
+                line.Y1 = pt1.Y;
+                Point pt2 = new Point(line.X2, line.Y2);
+                pt2.Offset(move.X, move.Y);
+                line.X2 = pt2.X;
+                line.Y2 = pt2.Y;
 
-            Point pt = line.Points[this.selectedDot.DotID];
-            pt.Offset(move.X, move.Y);
-            line.Points[this.selectedDot.DotID] = pt;
+            }
+            
             this.mousePos = lastPos;
+
+            Console.WriteLine(this.selectedDot.DotID);
         }
 
         /// <summary>
@@ -537,8 +567,8 @@ namespace NIR.Views
         {
             if (e.ChangedButton == MouseButton.Left)
             {
-                if (this.border.Visibility == Visibility.Visible)
-                    this.border.Visibility = Visibility.Hidden;
+                //if (this.border.Visibility == Visibility.Visible)
+                //    this.border.Visibility = Visibility.Hidden;
 
                 this.mousePos = null;
                 this.selectedDot = null;

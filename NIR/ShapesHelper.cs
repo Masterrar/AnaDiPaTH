@@ -115,13 +115,14 @@ namespace NIR.ShapesExtension
                     DoAxisSeparationTest(rectPoints[3], rectPoints[2], rectPoints[0], shapePoints) ||
                     DoAxisSeparationTest(rectPoints[2], rectPoints[1], rectPoints[0], shapePoints));
             }
-            else if (shape is Polyline) //если фигура - линия
+            else if (shape is Line) //если фигура - линия
             {
-                Polyline line = shape as Polyline;
-                for (int i = 1; i < line.Points.Count; i++) // проверяем каждый отрезок линии
+                Line line = shape as Line;
+                var PointsList = line.Points();
+                for (int i = 1; i < PointsList.Count; i++) // проверяем каждый отрезок линии
                 {
-                    Point pt1 = line.Points[i - 1];
-                    Point pt2 = line.Points[i];
+                    Point pt1 = PointsList[i - 1];
+                    Point pt2 = PointsList[i];
                     if ((rect.Contains(pt1) || rect.Contains(pt2)) //координаты отрезка совпадают с координатами вершин выделения
                         || (pt1.X == pt2.X && pt1.X >= rect.Left && pt1.X <= rect.Right) // то же, но отрезок вертикален
                         || (pt1.Y == pt2.Y && pt1.Y >= rect.Top && pt1.Y <= rect.Bottom) // то же, но отрезок горизонтален
@@ -136,9 +137,20 @@ namespace NIR.ShapesExtension
             else
                 return false;
         }
+        public static List<Point> Points(this Line line)
+        {
+            var resList = new List<Point>();
 
+
+            resList.Add(new Point(line.X1, line.Y1));
+            resList.Add(new Point(line.X2, line.Y2));
+
+
+            return resList;
+        }
+        
         /// <summary>
-        /// Возвращает Polyline. образуюущую 4х угольник
+        /// Возвращает Line. образуюущую 4х угольник
         /// </summary>
         public static PolyLineSegment GetSegment(this Path p)
         {
